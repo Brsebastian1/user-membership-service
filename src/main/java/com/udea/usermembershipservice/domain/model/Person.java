@@ -1,15 +1,15 @@
 package com.udea.usermembershipservice.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.udea.usermembershipservice.domain.exception.InvalidEmailException;
-import com.udea.usermembershipservice.domain.exception.InvalidIdException;
 import com.udea.usermembershipservice.domain.exception.InvalidPasswordException;
 import com.udea.usermembershipservice.domain.exception.InvalidDataException;
 
 public class Person {
 
-    private Integer idPerson;
+    private UUID idPerson;
     private String name;
     private String  lastName;
     private String email;
@@ -17,7 +17,7 @@ public class Person {
     private LocalDateTime createdAt;
     private Boolean active;
 
-    private Person(Integer idPerson, String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
+    private Person(UUID idPerson, String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
         this.idPerson = idPerson;
         this.name = name;
         this.lastName =  lastName;
@@ -27,15 +27,12 @@ public class Person {
         this.active = active;
     }
 
-    public static Person create(Integer idPerson, String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
-        validate(idPerson, name, lastName, email, password, createdAt, active);
-        return new Person(idPerson, name, lastName, email.toLowerCase(), password, createdAt, active);
+    public static Person create(String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
+        validate(name, lastName, email, password, createdAt, active);
+        return new Person(UUID.randomUUID(), name, lastName, email.toLowerCase(), password, createdAt, active);
     }
 
-    public static void validate(Integer idPerson, String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
-        if (idPerson == null || idPerson <= 0) {
-            throw new InvalidIdException();
-        }
+    public static void validate(String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
         if (name == null || name.trim().isEmpty()) {
             throw new InvalidDataException("Name cannot be null or empty.");
         }
@@ -56,7 +53,7 @@ public class Person {
         }
     }
 
-    public static Person restore(Integer idPerson, String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
+    public static Person restore(UUID idPerson, String name, String lastName, String email, String password, LocalDateTime createdAt, Boolean active) {
         return new Person(idPerson, name, lastName, email, password, createdAt, active);
     }
 
@@ -95,7 +92,7 @@ public class Person {
         this.active = active;
     }
 
-    public Integer getIdPerson() {
+    public UUID getIdPerson() {
         return idPerson;
     }
 
