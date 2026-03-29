@@ -10,6 +10,8 @@ import com.udea.usermembershipservice.aplication.port.out.IHomeRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.CreateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.HomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.UpdateHomeDto;
+import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
+import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 import com.udea.usermembershipservice.domain.model.Home;
 
 public class CreatedHomeUseCase implements ICreateHomeUseCase {
@@ -21,7 +23,7 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
     }
 
     @Override
-    public void createdHome(CreateHomeDto createHomeDto) {
+    public void createdHome(CreateHomeDto createHomeDto){
         try {
             if (homeRepositoryPort.getHomeByName(createHomeDto.name()).isPresent()) {
                 throw new RuntimeException("Home with this name already exists");
@@ -35,7 +37,7 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
 
             homeRepositoryPort.saveHome(home);
         } catch (Exception e) {
-            throw new RuntimeException("Error saving home", e);
+            throw new PersistenceException("Error saving home", e);
         }
     }
 
@@ -46,7 +48,7 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
                 .map(home -> new HomeDto(home.getIdHome(), home.getName(), home.getCreatedAt()))
                 .toList();
         } catch (Exception e) {
-            throw new RuntimeException("Error getting all homes", e);
+            throw new SearchException("Error getting all homes", e);
         }
     }
 
@@ -58,7 +60,7 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
 
             return new HomeDto(home.getIdHome(), home.getName(), home.getCreatedAt());
         } catch (Exception e) {
-            throw new RuntimeException("Error getting home by name", e);
+            throw new SearchException("Error getting home by name", e);
         }
     }
 
@@ -77,7 +79,7 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
             home.changeName(updateHomeDto.name());
             homeRepositoryPort.updateHome(home);
         } catch (Exception e) {
-            throw new RuntimeException("Error updating home", e);
+            throw new PersistenceException("Error updating home", e);
         }
     }
 
@@ -86,7 +88,7 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
         try {
             homeRepositoryPort.deleteHome(name);
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting home", e);
+            throw new PersistenceException("Error deleting home", e);
         }
     }
 }

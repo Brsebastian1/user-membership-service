@@ -5,6 +5,7 @@ import com.udea.usermembershipservice.aplication.port.out.IPasswordEncoderPort;
 import com.udea.usermembershipservice.aplication.port.out.IPersonRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginResultDto;
+import com.udea.usermembershipservice.aplication.useCase.exception.LoginException;
 import com.udea.usermembershipservice.domain.model.Person;
 
 public class LoginUserCase implements ILoginUserCase {
@@ -19,14 +20,18 @@ public class LoginUserCase implements ILoginUserCase {
 
     @Override
     public LoginResultDto login(LoginDto loginDto) {
-        
-        Person person = personRepositoryPort.getUserByEmail(loginDto.email()).orElseThrow(() -> new RuntimeException("Email or password invalid"));
+        try {
+            Person person = personRepositoryPort.getUserByEmail(loginDto.email()).orElseThrow(() -> new RuntimeException("Email or password invalid"));
 
-        if (passwordEncoderport.matches(loginDto.password(), person.getPassword())) {
+            if (passwordEncoderport.matches(loginDto.password(), person.getPassword())) {
             return new LoginResultDto(true, "Login successful");
-        } else {
+            } else {
             return new LoginResultDto(false, "Email or password invalid");
+            }
+        } catch (Exception e) {
+            throw new LoginException("Error during login", e);
         }
+        
     }
 
 

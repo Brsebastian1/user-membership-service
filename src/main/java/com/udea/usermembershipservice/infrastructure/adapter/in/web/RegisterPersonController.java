@@ -7,6 +7,11 @@ import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
+@Tag(name = "Usuarios", description = "Operaciones para registrar, consultar, actualizar y eliminar usuarios del sistema.")
 public class RegisterPersonController {
 
     public ICreateUserUseCase createUserUseCase;
@@ -27,6 +33,11 @@ public class RegisterPersonController {
         this.loginUsercase = loginUsercase;
     }
 
+    @Operation(summary = "Registrar usuario", description = "Crea un nuevo usuario con la informacion enviada.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario registrado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos invalidos para registrar el usuario")
+    })
     @PostMapping("register")
     public ResponseEntity<Void> registerPerson(@RequestBody CreatePersonDto createPersonDto) {
         try {
@@ -37,6 +48,10 @@ public class RegisterPersonController {
         }
     }
 
+    @Operation(summary = "Listar usuarios", description = "Obtiene todos los usuarios registrados en el sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida correctamente")
+    })
     @GetMapping("getUsers")
     public ResponseEntity<List<PersonDto>> getAllUsers() {
         try {
@@ -46,6 +61,11 @@ public class RegisterPersonController {
         }
     }
 
+    @Operation(summary = "Buscar usuario por correo", description = "Consulta la informacion de un usuario usando su correo electronico.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario encontrado correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontro un usuario con el correo indicado")
+    })
     @GetMapping("GetUserByEmail")
     public ResponseEntity<PersonDto> getUserByEmail(@RequestParam String email) {
         try {
@@ -55,6 +75,12 @@ public class RegisterPersonController {
         }
     }
 
+    @Operation(summary = "Actualizar usuario", description = "Actualiza la informacion de un usuario existente.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos invalidos para actualizar el usuario"),
+        @ApiResponse(responseCode = "404", description = "No se encontro el usuario a actualizar")
+    })
     @PostMapping("updateUser")
     public ResponseEntity<Void> updateUser(@RequestBody CreatePersonDto createPersonDto) {
         try {
@@ -66,6 +92,11 @@ public class RegisterPersonController {
     }
 
 
+    @Operation(summary = "Eliminar usuario", description = "Elimina un usuario a partir de su correo electronico.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario eliminado correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontro el usuario a eliminar")
+    })
     @PostMapping("deleteUser")   
     public ResponseEntity<Void> deleteUser(@RequestParam String email) {
         try {
