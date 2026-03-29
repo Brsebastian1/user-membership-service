@@ -3,8 +3,8 @@ package com.udea.usermembershipservice.aplication.useCase;
 import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
 import com.udea.usermembershipservice.aplication.port.out.IPasswordEncoderPort;
 import com.udea.usermembershipservice.aplication.port.out.IPersonRepositoryPort;
-import com.udea.usermembershipservice.aplication.useCase.dto.LoginDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.LoginResultDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginResultDto;
 import com.udea.usermembershipservice.domain.model.Person;
 
 public class LoginUserCase implements ILoginUserCase {

@@ -1,4 +1,4 @@
-package com.udea.usermembershipservice.aplication.useCase.dto;
+package com.udea.usermembershipservice.aplication.useCase.dto.person;
 
 public record CreatePersonDto(
     String name,

@@ -3,8 +3,8 @@ package com.udea.usermembershipservice.infrastructure.adapter.in.web;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
-import com.udea.usermembershipservice.aplication.useCase.dto.LoginDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.LoginResultDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginResultDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,7 +1,7 @@
 package com.udea.usermembershipservice.aplication.port.in;
 
-import com.udea.usermembershipservice.aplication.useCase.dto.LoginDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.LoginResultDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginResultDto;
 
 public interface ILoginUserCase {
     

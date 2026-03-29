@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreateUserUseCase;
 import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
-import com.udea.usermembershipservice.aplication.useCase.dto.CreatePersonDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.PersonDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
