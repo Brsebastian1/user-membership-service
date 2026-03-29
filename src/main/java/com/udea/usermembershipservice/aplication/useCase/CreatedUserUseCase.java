@@ -68,23 +68,6 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
         }
     }
 
-    @Override
-    public void updateUser(CreatePersonDto createUserDto) {
-        /*try {
-            if(userRepositoryPort.getUserByEmail(createUserDto.email()) == null) {
-                Person existingPerson = userRepositoryPort.getUserById(createUserDto.idPerson()).orElseThrow(() -> new RuntimeException("User not found"));
-                String passwordEncoder = passwordEncoderport.encode(createUserDto.password());
-                Person person = Person.create(existingPerson.getIdPerson(), createUserDto.name(), createUserDto.lastName(), createUserDto.email(), passwordEncoder, existingPerson.getcreatedAt(), true);
-
-                userRepositoryPort.updateUser(person);
-            }else {
-                throw new RuntimeException("Person with this email already exists");
-            }
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating person", e);
-        }*/
-    }
 
     @Override
     public void deleteUser(String email){

@@ -1,4 +1,4 @@
-package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter;
+package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter.out;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,11 +44,6 @@ public class HomePersistenceAdapter implements IHomeRepositoryPort {
     public Optional<Home> getHomeById(UUID idHome) {
         return repository.findById(idHome)
             .map(mapper::toDomain);
-    }
-
-    @Override
-    public void updateHome(Home home) {
-        repository.save(mapper.toEntity(home));
     }
 
     @Override

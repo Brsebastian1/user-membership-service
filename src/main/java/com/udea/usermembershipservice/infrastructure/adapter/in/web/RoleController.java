@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.udea.usermembershipservice.aplication.port.in.ICreateRoleUseCase;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.CreateRoleDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.RoleDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.role.UpdateRoleDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Roles", description = "Operaciones para crear, consultar, actualizar y eliminar roles de usuario.")
+@Tag(name = "Roles", description = "Operaciones para crear, consultar y eliminar roles de usuario.")
 public class RoleController {
 
     private final ICreateRoleUseCase createRoleUseCase;
@@ -57,18 +56,6 @@ public class RoleController {
     @GetMapping("getRoleByName")
     public ResponseEntity<RoleDto> getRoleByName(@RequestParam String name) {
         return ResponseEntity.ok(createRoleUseCase.getRoleByName(name));
-    }
-
-    @Operation(summary = "Actualizar rol", description = "Actualiza la informacion de un rol existente.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Rol actualizado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos invalidos para actualizar el rol"),
-        @ApiResponse(responseCode = "404", description = "No se encontro el rol a actualizar")
-    })
-    @PostMapping("updateRole")
-    public ResponseEntity<Void> updateRole(@RequestBody UpdateRoleDto updateRoleDto) {
-        createRoleUseCase.updateRole(updateRoleDto);
-        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Eliminar rol", description = "Elimina un rol usando su nombre como criterio de busqueda.")

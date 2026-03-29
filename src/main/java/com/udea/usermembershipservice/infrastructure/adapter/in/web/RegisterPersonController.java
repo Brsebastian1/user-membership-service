@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@Tag(name = "Usuarios", description = "Operaciones para registrar, consultar, actualizar y eliminar usuarios del sistema.")
+@Tag(name = "Usuarios", description = "Operaciones para registrar, consultar y eliminar usuarios del sistema.")
 public class RegisterPersonController {
 
     public ICreateUserUseCase createUserUseCase;
@@ -72,22 +72,6 @@ public class RegisterPersonController {
             return ResponseEntity.ok(createUserUseCase.getUserByEmail(email));
         } catch (Exception e) {
             throw new RuntimeException("Error getting user by email", e);
-        }
-    }
-
-    @Operation(summary = "Actualizar usuario", description = "Actualiza la informacion de un usuario existente.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos invalidos para actualizar el usuario"),
-        @ApiResponse(responseCode = "404", description = "No se encontro el usuario a actualizar")
-    })
-    @PostMapping("updateUser")
-    public ResponseEntity<Void> updateUser(@RequestBody CreatePersonDto createPersonDto) {
-        try {
-            createUserUseCase.updateUser(createPersonDto);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating user", e);
         }
     }
 

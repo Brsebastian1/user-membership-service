@@ -13,7 +13,6 @@ import com.udea.usermembershipservice.aplication.port.in.ICreateHomeUseCase;
 import com.udea.usermembershipservice.aplication.port.in.ICreatedMemberHome;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.CreateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.HomeDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.home.UpdateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberDto;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Hogares", description = "Operaciones para registrar, consultar, actualizar y eliminar hogares, así como listar sus miembros.")
+@Tag(name = "Hogares", description = "Operaciones para registrar, consultar y eliminar hogares, así como listar sus miembros.")
 public class HomeController {
 
     private final ICreateHomeUseCase createHomeUseCase;
@@ -63,17 +62,6 @@ public class HomeController {
         return ResponseEntity.ok(createHomeUseCase.getHomeByName(name));
     }
 
-    @Operation(summary = "Actualizar hogar", description = "Actualiza la informacion de un hogar existente.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Hogar actualizado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos invalidos para actualizar el hogar"),
-        @ApiResponse(responseCode = "404", description = "No se encontro el hogar a actualizar")
-    })
-    @PostMapping("updateHome")
-    public ResponseEntity<Void> updateHome(@RequestBody UpdateHomeDto updateHomeDto) {
-        createHomeUseCase.updateHome(updateHomeDto);
-        return ResponseEntity.ok().build();
-    }
 
     @Operation(summary = "Eliminar hogar", description = "Elimina un hogar usando su nombre como criterio de busqueda.")
     @ApiResponses(value = {

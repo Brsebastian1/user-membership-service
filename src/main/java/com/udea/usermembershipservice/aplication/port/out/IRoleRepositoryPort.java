@@ -16,7 +16,6 @@ public interface IRoleRepositoryPort {
 
     Optional<Role> getRoleById(UUID idRole);
 
-    void updateRole(Role role);
 
     void deleteRole(String name);
 }
