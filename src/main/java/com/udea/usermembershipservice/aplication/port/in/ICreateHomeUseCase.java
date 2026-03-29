@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.udea.usermembershipservice.aplication.useCase.dto.home.CreateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.HomeDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.home.UpdateHomeDto;
 
 public interface ICreateHomeUseCase {
 
@@ -13,8 +12,6 @@ public interface ICreateHomeUseCase {
     List<HomeDto> geatAllHomes();
 
     HomeDto getHomeByName(String name);
-
-    void updateHome(UpdateHomeDto updateHomeDto);
 
     void deleteHome(String name);
 }

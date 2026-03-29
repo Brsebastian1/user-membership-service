@@ -16,7 +16,6 @@ public interface IHomeRepositoryPort {
 
     Optional<Home> getHomeById(UUID idHome);
 
-    void updateHome(Home home);
 
     void deleteHome(String name);
 }

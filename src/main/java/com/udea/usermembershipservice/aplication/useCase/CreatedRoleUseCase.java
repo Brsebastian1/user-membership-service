@@ -7,7 +7,6 @@ import com.udea.usermembershipservice.aplication.port.in.ICreateRoleUseCase;
 import com.udea.usermembershipservice.aplication.port.out.IRoleRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.CreateRoleDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.RoleDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.role.UpdateRoleDto;
 import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
 import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 import com.udea.usermembershipservice.domain.model.Role;
@@ -57,24 +56,6 @@ public class CreatedRoleUseCase implements ICreateRoleUseCase {
         }
     }
 
-    @Override
-    public void updateRole(UpdateRoleDto updateRoleDto) {
-        try {
-            Role role = roleRepositoryPort.getRoleById(updateRoleDto.idRole())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-            roleRepositoryPort.getRoleByName(updateRoleDto.name())
-                .filter(existingRole -> !existingRole.getIdRole().equals(updateRoleDto.idRole()))
-                .ifPresent(existingRole -> {
-                    throw new RuntimeException("Role with this name already exists");
-                });
-
-            role.changeName(updateRoleDto.name());
-            roleRepositoryPort.updateRole(role);
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating role", e);
-        }
-    }
 
     @Override
     public void deleteRole(String name) {

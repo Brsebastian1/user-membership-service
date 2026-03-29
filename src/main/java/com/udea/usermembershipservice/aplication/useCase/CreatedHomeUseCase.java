@@ -9,7 +9,6 @@ import com.udea.usermembershipservice.aplication.port.in.ICreateHomeUseCase;
 import com.udea.usermembershipservice.aplication.port.out.IHomeRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.CreateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.HomeDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.home.UpdateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
 import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 import com.udea.usermembershipservice.domain.model.Home;
@@ -64,24 +63,6 @@ public class CreatedHomeUseCase implements ICreateHomeUseCase {
         }
     }
 
-    @Override
-    public void updateHome(UpdateHomeDto updateHomeDto) {
-        try {
-            Home home = homeRepositoryPort.getHomeById(updateHomeDto.idHome())
-                .orElseThrow(() -> new RuntimeException("Home not found"));
-
-            homeRepositoryPort.getHomeByName(updateHomeDto.name())
-                .filter(existingHome -> !existingHome.getIdHome().equals(updateHomeDto.idHome()))
-                .ifPresent(existingHome -> {
-                    throw new RuntimeException("Home with this name already exists");
-                });
-
-            home.changeName(updateHomeDto.name());
-            homeRepositoryPort.updateHome(home);
-        } catch (Exception e) {
-            throw new PersistenceException("Error updating home", e);
-        }
-    }
 
     @Override
     public void deleteHome(String name) {

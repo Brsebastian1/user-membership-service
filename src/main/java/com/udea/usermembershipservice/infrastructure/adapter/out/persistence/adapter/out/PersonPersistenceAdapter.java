@@ -1,4 +1,4 @@
-package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter;
+package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter.out;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,11 +55,6 @@ public class PersonPersistenceAdapter implements IPersonRepositoryPort {
     }
 
 
-    @Override
-    public void updateUser(Person person) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
-    }
 
     @Override
     public void deleteUser(String email) {

@@ -11,7 +11,6 @@ public interface IPersonRepositoryPort {
     public List<Person> getAllUsers();
     public Optional<Person> getUserByEmail(String email);
     public Optional<Person> getUserById(UUID idPerson);
-    public void updateUser(Person person);
     public void deleteUser(String email);
     
 }

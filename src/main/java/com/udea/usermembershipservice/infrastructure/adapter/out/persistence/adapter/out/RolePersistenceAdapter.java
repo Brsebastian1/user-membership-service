@@ -1,4 +1,4 @@
-package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter;
+package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter.out;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +45,6 @@ public class RolePersistenceAdapter implements IRoleRepositoryPort {
             .map(mapper::toDomain);
     }
 
-    @Override
-    public void updateRole(Role role) {
-        repository.save(mapper.toEntity(role));
-    }
 
     @Override
     public void deleteRole(String name) {

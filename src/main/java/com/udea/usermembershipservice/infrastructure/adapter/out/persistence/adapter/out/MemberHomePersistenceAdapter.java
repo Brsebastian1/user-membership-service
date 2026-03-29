@@ -1,4 +1,4 @@
-package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter;
+package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.adapter.out;
 
 import java.util.List;
 import java.util.Optional;

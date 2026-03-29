@@ -9,6 +9,5 @@ public interface ICreateUserUseCase {
     public void createdUser(CreatePersonDto createPersonDto);
     public List<PersonDto> geatAllUsers();
     public PersonDto getUserByEmail(String email);
-    public void updateUser(CreatePersonDto createPersonDto);
     public void deleteUser(String email);
 }
