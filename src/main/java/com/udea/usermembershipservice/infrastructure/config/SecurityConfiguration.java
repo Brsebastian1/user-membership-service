@@ -33,7 +33,11 @@ public class SecurityConfiguration {
                     "/getHomes",
                     "/getHomeByName",
                     "/updateHome",
-                    "/deleteHome"
+                    "/deleteHome",
+                    "/GetMemberHome",
+                    "/save/memberHome",
+                    "/delete/memberHome",
+                    "/get/memberHome"
                 ).permitAll()
                 .anyRequest().authenticated()
             );

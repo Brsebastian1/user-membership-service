@@ -1,0 +1,83 @@
+package com.udea.usermembershipservice.aplication.useCase;
+
+import java.util.List;
+
+import com.udea.usermembershipservice.aplication.port.in.ICreatedMemberHome;
+import com.udea.usermembershipservice.aplication.port.out.IHomeRepositoryPort;
+import com.udea.usermembershipservice.aplication.port.out.IMemberHomeRepositoryPort;
+import com.udea.usermembershipservice.aplication.port.out.IPersonRepositoryPort;
+import com.udea.usermembershipservice.aplication.port.out.IRoleRepositoryPort;
+import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberHomeDto;
+import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
+import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
+
+public class CreateMemberHomeUseCase implements ICreatedMemberHome{
+
+    IHomeRepositoryPort homeRepositoryPort;
+    IPersonRepositoryPort personRepositoryPort;
+    IRoleRepositoryPort roleRepositoryPort;
+    IMemberHomeRepositoryPort memberHomeRepositoryPort;
+    
+
+    public CreateMemberHomeUseCase(IHomeRepositoryPort homeRepositoryPort, IPersonRepositoryPort personRepositoryPort, IRoleRepositoryPort roleRepositoryPort, IMemberHomeRepositoryPort memberHomeRepositoryPort) {
+        this.homeRepositoryPort = homeRepositoryPort;
+        this.personRepositoryPort = personRepositoryPort;
+        this.roleRepositoryPort = roleRepositoryPort;
+        this.memberHomeRepositoryPort = memberHomeRepositoryPort;
+    }
+
+    @Override
+    public void createdMemberHome(String gmail, String rol, String nameHogar) {
+        try {
+            var home = homeRepositoryPort.getHomeByName(nameHogar).orElseThrow(() -> new RuntimeException("Home not found"));
+        var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
+        var role = roleRepositoryPort.getRoleByName(rol).orElseThrow(() -> new RuntimeException("Role not found"));
+
+        memberHomeRepositoryPort.saveMemberHome(home.getIdHome(), person.getIdPerson(), role.getIdRole());
+        } catch (Exception e) {
+            throw new PersistenceException("Error saving member home", e);
+        }
+        
+    }
+
+    @Override
+    public void deleteMemberHome(String nameHome, String gmail) {       
+        try {
+            var home = homeRepositoryPort.getHomeByName(nameHome).orElseThrow(() -> new RuntimeException("Home not found"));
+        var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
+
+        memberHomeRepositoryPort.deleteMemberHome(home.getIdHome(), person.getIdPerson());
+        } catch (Exception e) {
+            throw new PersistenceException("Error deleting member home", e);
+        }
+    }
+
+    @Override
+    public MemberHomeDto getMemberHome(String gmail) {
+        try {
+            var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
+            var memberHome = memberHomeRepositoryPort.getMemberHome(person.getIdPerson()).orElseThrow(() -> new RuntimeException("Member home not found"));
+        
+            return memberHome;
+        } catch (Exception e) {
+            throw new SearchException("Error getting member home", e);
+        }
+        
+    }
+
+    @Override
+    public List<MemberDto> getAllMemberHome(String nameHome) {
+        try {
+            var home = homeRepositoryPort.getHomeByName(nameHome).orElseThrow(() -> new RuntimeException("Home not found"));
+            var members = memberHomeRepositoryPort.getAllMemberHome(home.getIdHome());
+        
+        return members;
+        } catch (Exception e) {
+            throw new SearchException("Error getting all member home", e); 
+        }
+        
+    }
+
+
+}

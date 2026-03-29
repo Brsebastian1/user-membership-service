@@ -10,6 +10,8 @@ import com.udea.usermembershipservice.aplication.port.out.IPersonRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 import com.udea.usermembershipservice.domain.model.Person;
+import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
+import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 
 public class CreatedUserUseCase implements ICreateUserUseCase{
 
@@ -35,7 +37,7 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
                 throw new RuntimeException("Person with this email already exists");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error saving person", e);
+            throw new PersistenceException("Error saving person", e);
         }
 
     }
@@ -51,7 +53,7 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
             )).toList();
             return personDtos;
         } catch (Exception e) {
-            throw new RuntimeException("Error getting all users", e);
+            throw new SearchException("Error getting all users", e);
         }
     }
 
@@ -62,7 +64,7 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
             PersonDto personDto = new PersonDto(person.getName(), person.getLastName(), person.getEmail());
             return personDto;
         } catch (Exception e) {
-            throw new RuntimeException("Error getting user by id", e);
+            throw new SearchException("Error getting user by email", e);
         }
     }
 
@@ -89,7 +91,7 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
         try {
             userRepositoryPort.deleteUser(email);
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting person", e);
+            throw new PersistenceException("Error deleting person", e);
         }
     }
 

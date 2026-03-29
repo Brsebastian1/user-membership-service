@@ -36,8 +36,7 @@ public class RolePersistenceAdapter implements IRoleRepositoryPort {
 
     @Override
     public Optional<Role> getRoleByName(String name) {
-        return repository.findByNameIgnoreCase(name)
-            .map(mapper::toDomain);
+        return repository.findByNameIgnoreCase(name).map(mapper::toDomain);
     }
 
     @Override

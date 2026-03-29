@@ -14,7 +14,13 @@ import com.udea.usermembershipservice.aplication.useCase.dto.role.CreateRoleDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.RoleDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.UpdateRoleDto;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(name = "Roles", description = "Operaciones para crear, consultar, actualizar y eliminar roles de usuario.")
 public class RoleController {
 
     private final ICreateRoleUseCase createRoleUseCase;
@@ -23,28 +29,53 @@ public class RoleController {
         this.createRoleUseCase = createRoleUseCase;
     }
 
+    @Operation(summary = "Registrar rol", description = "Crea un nuevo rol dentro del sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Rol registrado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos invalidos para registrar el rol")
+    })
     @PostMapping("registerRole")
     public ResponseEntity<Void> registerRole(@RequestBody CreateRoleDto createRoleDto) {
         createRoleUseCase.createdRole(createRoleDto);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Listar roles", description = "Obtiene todos los roles disponibles en el sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de roles obtenida correctamente")
+    })
     @GetMapping("getRoles")
     public ResponseEntity<List<RoleDto>> getAllRoles() {
         return ResponseEntity.ok(createRoleUseCase.geatAllRoles());
     }
 
+    @Operation(summary = "Buscar rol por nombre", description = "Consulta un rol especifico a partir de su nombre.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Rol encontrado correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontro el rol solicitado")
+    })
     @GetMapping("getRoleByName")
     public ResponseEntity<RoleDto> getRoleByName(@RequestParam String name) {
         return ResponseEntity.ok(createRoleUseCase.getRoleByName(name));
     }
 
+    @Operation(summary = "Actualizar rol", description = "Actualiza la informacion de un rol existente.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Rol actualizado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos invalidos para actualizar el rol"),
+        @ApiResponse(responseCode = "404", description = "No se encontro el rol a actualizar")
+    })
     @PostMapping("updateRole")
     public ResponseEntity<Void> updateRole(@RequestBody UpdateRoleDto updateRoleDto) {
         createRoleUseCase.updateRole(updateRoleDto);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Eliminar rol", description = "Elimina un rol usando su nombre como criterio de busqueda.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Rol eliminado correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontro el rol a eliminar")
+    })
     @PostMapping("deleteRole")
     public ResponseEntity<Void> deleteRole(@RequestParam String name) {
         createRoleUseCase.deleteRole(name);

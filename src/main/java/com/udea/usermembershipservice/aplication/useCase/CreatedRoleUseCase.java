@@ -8,6 +8,8 @@ import com.udea.usermembershipservice.aplication.port.out.IRoleRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.CreateRoleDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.RoleDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.role.UpdateRoleDto;
+import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
+import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 import com.udea.usermembershipservice.domain.model.Role;
 
 public class CreatedRoleUseCase implements ICreateRoleUseCase {
@@ -28,7 +30,7 @@ public class CreatedRoleUseCase implements ICreateRoleUseCase {
             Role role = Role.create(UUID.randomUUID(), createRoleDto.name());
             roleRepositoryPort.saveRole(role);
         } catch (Exception e) {
-            throw new RuntimeException("Error saving role", e);
+            throw new PersistenceException("Error saving role", e);
         }
     }
 
@@ -39,19 +41,19 @@ public class CreatedRoleUseCase implements ICreateRoleUseCase {
                 .map(role -> new RoleDto(role.getIdRole(), role.getName()))
                 .toList();
         } catch (Exception e) {
-            throw new RuntimeException("Error getting all roles", e);
+            throw new SearchException("Error getting all roles", e);
         }
     }
 
     @Override
     public RoleDto getRoleByName(String name) {
-        try {
+        try{
             Role role = roleRepositoryPort.getRoleByName(name)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
             return new RoleDto(role.getIdRole(), role.getName());
         } catch (Exception e) {
-            throw new RuntimeException("Error getting role by name", e);
+            throw new SearchException("Error getting role by name", e);
         }
     }
 
@@ -79,7 +81,7 @@ public class CreatedRoleUseCase implements ICreateRoleUseCase {
         try {
             roleRepositoryPort.deleteRole(name);
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting role", e);
+            throw new PersistenceException("Error deleting role", e);
         }
     }
 }

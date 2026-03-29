@@ -29,6 +29,7 @@ public class Role {
     }
 
     public static Role restore(UUID idRole, String name) {
+        validate(idRole, name);
         return new Role(idRole, name);
     }
 
