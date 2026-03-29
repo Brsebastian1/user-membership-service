@@ -7,8 +7,8 @@ import java.util.List;
 import com.udea.usermembershipservice.aplication.port.in.ICreateUserUseCase;
 import com.udea.usermembershipservice.aplication.port.out.IPasswordEncoderPort;
 import com.udea.usermembershipservice.aplication.port.out.IPersonRepositoryPort;
-import com.udea.usermembershipservice.aplication.useCase.dto.CreatePersonDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.PersonDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 import com.udea.usermembershipservice.domain.model.Person;
 
 public class CreatedUserUseCase implements ICreateUserUseCase{

@@ -2,8 +2,8 @@ package com.udea.usermembershipservice.aplication.port.in;
 
 import java.util.List;
 
-import com.udea.usermembershipservice.aplication.useCase.dto.CreatePersonDto;
-import com.udea.usermembershipservice.aplication.useCase.dto.PersonDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 
 public interface ICreateUserUseCase {
     public void createdUser(CreatePersonDto createPersonDto);

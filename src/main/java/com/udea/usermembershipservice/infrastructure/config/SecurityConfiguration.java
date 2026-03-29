@@ -23,7 +23,17 @@ public class SecurityConfiguration {
                     "/GetUserByEmail",
                     "/updateUser",
                     "/deleteUser",
-                    "/login" 
+                    "/login",
+                    "/registerRole",
+                    "/getRoles",
+                    "/getRoleByName",
+                    "/updateRole",
+                    "/deleteRole",
+                    "/registerHome",
+                    "/getHomes",
+                    "/getHomeByName",
+                    "/updateHome",
+                    "/deleteHome"
                 ).permitAll()
                 .anyRequest().authenticated()
             );

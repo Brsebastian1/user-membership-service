@@ -1,6 +1,4 @@
-package com.udea.usermembershipservice.aplication.useCase.dto;
-
-import java.util.UUID;
+package com.udea.usermembershipservice.aplication.useCase.dto.person;
 
 public record PersonDto(
     String name,
