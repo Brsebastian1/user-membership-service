@@ -34,7 +34,8 @@ public class SecurityConfiguration {
                     "/GetMemberHome",
                     "/save/memberHome",
                     "/delete/memberHome",
-                    "/get/memberHome"
+                    "/get/memberHome",
+                    "/updateRole"
                 ).permitAll()
                 .anyRequest().authenticated()
             );

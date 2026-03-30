@@ -102,9 +102,10 @@ public class BeanConfiguration {
     @Bean
     public ICreateUserUseCase createUserUseCase(
             IPersonRepositoryPort personRepositoryPort,
-            IPasswordEncoderPort passwordEncoderPort
+            IPasswordEncoderPort passwordEncoderPort,
+            ILoginUserCase loginUserCase
     ) {
-        return new CreatedUserUseCase(personRepositoryPort, passwordEncoderPort);
+        return new CreatedUserUseCase(personRepositoryPort, passwordEncoderPort, loginUserCase);
     }
 
     @Bean
@@ -116,9 +117,10 @@ public class BeanConfiguration {
 
     @Bean
     public ICreateHomeUseCase createHomeUseCase(
-            IHomeRepositoryPort homeRepositoryPort
+            IHomeRepositoryPort homeRepositoryPort,
+            ILoginUserCase loginUserCase
     ) {
-        return new CreatedHomeUseCase(homeRepositoryPort);
+        return new CreatedHomeUseCase(homeRepositoryPort, loginUserCase);
     }
 
     @Bean

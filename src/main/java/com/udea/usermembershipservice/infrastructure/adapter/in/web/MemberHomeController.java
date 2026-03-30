@@ -2,6 +2,8 @@ package com.udea.usermembershipservice.infrastructure.adapter.in.web;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.udea.usermembershipservice.aplication.port.in.ICreatedMemberHome;
 import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.CreatedMemberHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberHomeDto;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 
 
@@ -64,12 +68,33 @@ public class MemberHomeController {
         @ApiResponse(responseCode = "404", description = "No se encontro informacion del miembro en un hogar")
     })
     @GetMapping("get/memberHome")
-    public MemberHomeDto getMemberHome(@RequestParam String gmail) {
+    public CompletableFuture<MemberHomeDto> getMemberHome(@RequestParam String gmail) {
         try {
-            return createdMemberHome.getMemberHome(gmail);
+            return createdMemberHome.getMemberHome(gmail).exceptionally(e -> {
+                throw new RuntimeException("Error getting member home: " + e.getMessage(), e);
+            });
         } catch (Exception e) {
-            throw new RuntimeException("Error getting member home", e);
+            return CompletableFuture.failedFuture(
+                new RuntimeException("Error getting member home", e)
+            );
         }
     }
+
+    @Operation(summary = "Actualizar rol de un miembro en un hogar", description = "Cambia el rol asignado a una persona dentro de un hogar específico.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Rol actualizado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos para actualizar el rol"),
+        @ApiResponse(responseCode = "404", description = "No se encontró el hogar, la persona o el rol indicado")
+    })
+    @PostMapping("updateRole")
+    public ResponseEntity<String> updateRoleMemberHome(@RequestParam String nameHome, @RequestParam String gmail, @RequestParam String newRol) {
+        try {
+            createdMemberHome.updateRoleMemberHome(nameHome, gmail, newRol);
+            return ResponseEntity.ok("Rol actualizado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating role member home: " + e.getMessage());
+        }
+    }   
+    
         
 }
