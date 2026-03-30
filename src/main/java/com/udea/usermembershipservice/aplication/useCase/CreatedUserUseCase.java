@@ -5,11 +5,14 @@ import java.time.ZoneId;
 import java.util.List;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreateUserUseCase;
+import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
 import com.udea.usermembershipservice.aplication.port.out.IPasswordEncoderPort;
 import com.udea.usermembershipservice.aplication.port.out.IPersonRepositoryPort;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 import com.udea.usermembershipservice.domain.model.Person;
+import com.udea.usermembershipservice.aplication.useCase.exception.LoginException;
 import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
 import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 
@@ -17,12 +20,14 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
 
     IPasswordEncoderPort passwordEncoderport;
     IPersonRepositoryPort userRepositoryPort;
+    ILoginUserCase loginUserCase;
 
     LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("America/Bogota"));
     
-    public CreatedUserUseCase(IPersonRepositoryPort userRepository, IPasswordEncoderPort passwordEncoder) {
+    public CreatedUserUseCase(IPersonRepositoryPort userRepository, IPasswordEncoderPort passwordEncoder, ILoginUserCase loginUserCase) {
         this.passwordEncoderport = passwordEncoder;
         this.userRepositoryPort = userRepository;
+        this.loginUserCase = loginUserCase;
     }
 
     @Override
@@ -31,8 +36,9 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
             if(userRepositoryPort.getUserByEmail(createUserDto.email()) == null) {
                 
             String passwordEncoder = passwordEncoderport.encode(createUserDto.password());
-            Person person = Person.create(createUserDto.name(), createUserDto.lastName(), createUserDto.email(), passwordEncoder, createdAt, true);
-            userRepositoryPort.saveUser(person);
+            Person person = Person.create(createUserDto.name(), createUserDto.lastName(), createUserDto.email(), createUserDto.password(), createdAt, true);
+            Person savedPerson = Person.create(createUserDto.name(), createUserDto.lastName(), createUserDto.email(), passwordEncoder, createdAt, true);
+            userRepositoryPort.saveUser(savedPerson);
             }else {
                 throw new RuntimeException("Person with this email already exists");
             }
@@ -70,9 +76,14 @@ public class CreatedUserUseCase implements ICreateUserUseCase{
 
 
     @Override
-    public void deleteUser(String email){
+    public void deleteUser(LoginDto loginDto) {
         try {
-            userRepositoryPort.deleteUser(email);
+            if(loginUserCase.login(loginDto).acces()==true) {
+                userRepositoryPort.deleteUser(loginDto.email());
+            }else{
+                throw new LoginException("Email or password invalid");
+            }
+           
         } catch (Exception e) {
             throw new PersistenceException("Error deleting person", e);
         }

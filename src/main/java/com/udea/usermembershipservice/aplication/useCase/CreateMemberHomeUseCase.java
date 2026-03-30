@@ -1,6 +1,7 @@
 package com.udea.usermembershipservice.aplication.useCase;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreatedMemberHome;
 import com.udea.usermembershipservice.aplication.port.out.IHomeRepositoryPort;
@@ -54,16 +55,17 @@ public class CreateMemberHomeUseCase implements ICreatedMemberHome{
     }
 
     @Override
-    public MemberHomeDto getMemberHome(String gmail) {
-        try {
-            var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
-            var memberHome = memberHomeRepositoryPort.getMemberHome(person.getIdPerson()).orElseThrow(() -> new RuntimeException("Member home not found"));
-        
-            return memberHome;
-        } catch (Exception e) {
-            throw new SearchException("Error getting member home", e);
-        }
-        
+    public CompletableFuture<MemberHomeDto> getMemberHome(String gmail) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
+                var memberHome = memberHomeRepositoryPort.getMemberHome(person.getIdPerson()).orElseThrow(() -> new RuntimeException("Member home not found"));
+            
+                return memberHome;
+            } catch (Exception e) {
+                throw new SearchException("Error getting member home", e);
+            }
+        });
     }
 
     @Override
@@ -79,5 +81,18 @@ public class CreateMemberHomeUseCase implements ICreatedMemberHome{
         
     }
 
+    @Override
+    public void updateRoleMemberHome(String nameHome, String gmail, String newRol) {
+        try {
+            var home = homeRepositoryPort.getHomeByName(nameHome).orElseThrow(() -> new RuntimeException("Home not found"));
+            var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
+            var role = roleRepositoryPort.getRoleByName(newRol).orElseThrow(() -> new RuntimeException("Role not found"));
+
+            memberHomeRepositoryPort.updateRoleMemberHome(home.getIdHome(), person.getIdPerson(), role.getIdRole());
+        } catch (Exception e) {
+            throw new PersistenceException("Error updating role member home", e);
+        }
+    
+    }
 
 }

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreateUserUseCase;
 import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.CreatePersonDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.person.PersonDto;
 
@@ -82,9 +83,9 @@ public class RegisterPersonController {
         @ApiResponse(responseCode = "404", description = "No se encontro el usuario a eliminar")
     })
     @PostMapping("deleteUser")   
-    public ResponseEntity<Void> deleteUser(@RequestParam String email) {
+    public ResponseEntity<Void> deleteUser(@RequestBody LoginDto loginDto) {
         try {
-            createUserUseCase.deleteUser(email);
+            createUserUseCase.deleteUser(loginDto);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             throw new RuntimeException("Error deleting user", e);

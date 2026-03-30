@@ -13,5 +13,6 @@ public interface IMemberHomeRepositoryPort {
     public void deleteMemberHome(UUID homeId, UUID personId);
     public Optional<MemberHomeDto> getMemberHome(UUID personId);
     public List<MemberDto> getAllMemberHome(UUID homeId);
+    public void updateRoleMemberHome(UUID homeId, UUID personId, UUID newRol);
 
 }

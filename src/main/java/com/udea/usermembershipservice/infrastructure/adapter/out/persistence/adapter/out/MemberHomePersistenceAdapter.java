@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.udea.usermembershipservice.aplication.port.out.IMemberHomeRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberHomeDto;
+import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.MemberHomeJpaEntity;
+import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.MemberHomeJpaEntityId;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.mapper.MemberHomePersistenceMapper;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.repository.SpringDataJpaRepository;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.repository.SpringDataMemberHomeJpaRepository;
@@ -31,7 +33,7 @@ public class MemberHomePersistenceAdapter implements IMemberHomeRepositoryPort {
 
     @Override
     public void saveMemberHome(UUID homeId, UUID personId, UUID rol) {
-        var savedMemberHome = repository.save(mapper.toEntity(homeId, personId, rol));
+        MemberHomeJpaEntity savedMemberHome = repository.save(mapper.toEntity(homeId, personId, rol));
         if (savedMemberHome == null) {
             throw new RuntimeException("Error saving member home");
         }
@@ -61,5 +63,15 @@ public class MemberHomePersistenceAdapter implements IMemberHomeRepositoryPort {
                     memberHomeJpaEntity.getRoleId()
                 )))
             .toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateRoleMemberHome(UUID homeId, UUID personId, UUID newRol) {
+        MemberHomeJpaEntityId memberHomeId = new MemberHomeJpaEntityId(homeId, personId);
+        MemberHomeJpaEntity memberHome = repository.findById(memberHomeId)
+            .orElseThrow(() -> new RuntimeException("Member home not found"));
+        memberHome.setRoleId(newRol);
+        repository.save(memberHome);
     }
 }

@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreateHomeUseCase;
+import com.udea.usermembershipservice.aplication.port.in.ILoginUserCase;
 import com.udea.usermembershipservice.aplication.port.out.IHomeRepositoryPort;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.CreateHomeDto;
 import com.udea.usermembershipservice.aplication.useCase.dto.home.HomeDto;
+import com.udea.usermembershipservice.aplication.useCase.dto.login.LoginDto;
 import com.udea.usermembershipservice.aplication.useCase.exception.PersistenceException;
 import com.udea.usermembershipservice.aplication.useCase.exception.SearchException;
 import com.udea.usermembershipservice.domain.model.Home;
@@ -16,25 +18,35 @@ import com.udea.usermembershipservice.domain.model.Home;
 public class CreatedHomeUseCase implements ICreateHomeUseCase {
 
     private final IHomeRepositoryPort homeRepositoryPort;
+    private final ILoginUserCase loginUserCase;
 
-    public CreatedHomeUseCase(IHomeRepositoryPort homeRepositoryPort) {
+    public CreatedHomeUseCase(IHomeRepositoryPort homeRepositoryPort, ILoginUserCase loginUserCase) {
         this.homeRepositoryPort = homeRepositoryPort;
+        this.loginUserCase = loginUserCase;
     }
 
     @Override
-    public void createdHome(CreateHomeDto createHomeDto){
+    public void createdHome(CreateHomeDto createHomeDto) {
         try {
             if (homeRepositoryPort.getHomeByName(createHomeDto.name()).isPresent()) {
                 throw new RuntimeException("Home with this name already exists");
             }
 
-            Home home = Home.create(
+            LoginDto loginDto = new LoginDto(createHomeDto.gmail(), createHomeDto.password());
+            
+            if(loginUserCase.login(loginDto).acces() == true){
+                Home home = Home.create(
                 UUID.randomUUID(),
                 createHomeDto.name(),
                 LocalDateTime.now(ZoneId.of("America/Bogota"))
             );
 
             homeRepositoryPort.saveHome(home);
+            }else{
+                throw new RuntimeException("Invalid login credentials");
+            }
+
+            
         } catch (Exception e) {
             throw new PersistenceException("Error saving home", e);
         }
