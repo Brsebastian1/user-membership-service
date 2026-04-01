@@ -16,4 +16,6 @@ public interface SpringDataMemberHomeJpaRepository extends JpaRepository<MemberH
     List<MemberHomeJpaEntity> findAllByIdHomeId(UUID homeId);
 
     void deleteByIdHomeIdAndIdPersonId(UUID homeId, UUID personId);
+
+    Optional<MemberHomeJpaEntity> findByIdPersonIdAndIdHomeId(UUID personId, UUID homeId);
 }

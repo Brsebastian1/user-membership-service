@@ -1,6 +1,7 @@
 package com.udea.usermembershipservice.aplication.useCase;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreatedMemberHome;
@@ -55,12 +56,10 @@ public class CreateMemberHomeUseCase implements ICreatedMemberHome{
     }
 
     @Override
-    public CompletableFuture<MemberHomeDto> getMemberHome(String gmail) {
+    public CompletableFuture<MemberHomeDto> getMemberHome(UUID personId, UUID homeId) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                var person = personRepositoryPort.getUserByEmail(gmail).orElseThrow(() -> new RuntimeException("Person not found"));
-                var memberHome = memberHomeRepositoryPort.getMemberHome(person.getIdPerson()).orElseThrow(() -> new RuntimeException("Member home not found"));
-            
+                MemberHomeDto memberHome = memberHomeRepositoryPort.getMemberHome(personId, homeId).orElseThrow(() -> new RuntimeException("Member home not found"));
                 return memberHome;
             } catch (Exception e) {
                 throw new SearchException("Error getting member home", e);
