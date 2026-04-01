@@ -5,6 +5,7 @@ public record MemberHomeDto(
     String personId,
     String name,
     String last_name,
+    String homeName,
     String email, 
     Boolean active
 ) {

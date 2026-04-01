@@ -3,6 +3,8 @@ package com.udea.usermembershipservice.infrastructure.adapter.out.persistence.ma
 import java.util.UUID;
 
 import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberHomeDto;
+import com.udea.usermembershipservice.domain.model.Home;
+import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.HomeJpaEntity;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.MemberHomeJpaEntity;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.MemberHomeJpaEntityId;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.PersonJpaEntity;
@@ -16,12 +18,13 @@ public class MemberHomePersistenceMapper {
         );
     }
 
-    public MemberHomeDto toDto(MemberHomeJpaEntity memberHomeJpaEntity, PersonJpaEntity personJpaEntity) {
+    public MemberHomeDto toDto(MemberHomeJpaEntity memberHomeJpaEntity, PersonJpaEntity personJpaEntity, HomeJpaEntity homeJpaEntity) {
         return new MemberHomeDto(
             memberHomeJpaEntity.getId().getHomeId().toString(),
             memberHomeJpaEntity.getId().getPersonId().toString(),
             personJpaEntity.getName(),
             personJpaEntity.getLastName(),
+            homeJpaEntity.getName(),
             personJpaEntity.getEmail(),
             personJpaEntity.isActive()
         );

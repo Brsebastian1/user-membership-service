@@ -37,6 +37,12 @@ import com.udea.usermembershipservice.infrastructure.adapter.out.security.Passwo
 public class BeanConfiguration {
 
 
+    private final SpringDataHomeJpaRepository springDataHomeJpaRepository;
+
+    BeanConfiguration(SpringDataHomeJpaRepository springDataHomeJpaRepository) {
+        this.springDataHomeJpaRepository = springDataHomeJpaRepository;
+    }
+
     @Bean
     public PersonPersistenceMapper personPersistenceMapper() {
         return new PersonPersistenceMapper();
@@ -85,12 +91,15 @@ public class BeanConfiguration {
     public IMemberHomeRepositoryPort memberHomeRepositoryPort(
             SpringDataMemberHomeJpaRepository springDataMemberHomeJpaRepository,
             SpringDataJpaRepository springDataJpaRepository,
-            MemberHomePersistenceMapper memberHomePersistenceMapper
+            MemberHomePersistenceMapper memberHomePersistenceMapper,
+            SpringDataHomeJpaRepository springDataHomeJpaRepository
+            
     ) {
         return new MemberHomePersistenceAdapter(
             springDataMemberHomeJpaRepository,
             springDataJpaRepository,
-            memberHomePersistenceMapper
+            memberHomePersistenceMapper,
+            springDataHomeJpaRepository
         );
     }
 
