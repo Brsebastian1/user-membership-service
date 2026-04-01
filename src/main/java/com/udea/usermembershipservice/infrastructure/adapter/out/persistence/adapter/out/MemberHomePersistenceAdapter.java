@@ -45,8 +45,8 @@ public class MemberHomePersistenceAdapter implements IMemberHomeRepositoryPort {
     }
 
     @Override
-    public Optional<MemberHomeDto> getMemberHome(UUID personId) {
-        return repository.findByIdPersonId(personId)
+    public Optional<MemberHomeDto> getMemberHome(UUID personId, UUID homeId) {
+        return repository.findByIdPersonIdAndIdHomeId(personId, homeId)
             .flatMap(memberHomeJpaEntity -> personRepository.findById(personId)
                 .map(personJpaEntity -> mapper.toDto(memberHomeJpaEntity, personJpaEntity)));
     }

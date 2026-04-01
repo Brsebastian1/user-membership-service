@@ -2,6 +2,7 @@ package com.udea.usermembershipservice.infrastructure.adapter.in.web;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.udea.usermembershipservice.aplication.port.in.ICreatedMemberHome;
@@ -68,9 +69,9 @@ public class MemberHomeController {
         @ApiResponse(responseCode = "404", description = "No se encontro informacion del miembro en un hogar")
     })
     @GetMapping("get/memberHome")
-    public CompletableFuture<MemberHomeDto> getMemberHome(@RequestParam String gmail) {
+    public CompletableFuture<MemberHomeDto> getMemberHome(@RequestParam UUID personId, @RequestParam UUID homeId) {
         try {
-            return createdMemberHome.getMemberHome(gmail).exceptionally(e -> {
+            return createdMemberHome.getMemberHome(personId, homeId).exceptionally(e -> {
                 throw new RuntimeException("Error getting member home: " + e.getMessage(), e);
             });
         } catch (Exception e) {

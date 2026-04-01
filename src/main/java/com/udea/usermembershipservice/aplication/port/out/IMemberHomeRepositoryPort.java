@@ -11,7 +11,7 @@ public interface IMemberHomeRepositoryPort {
 
     public void saveMemberHome(UUID homeId, UUID personId, UUID rol);
     public void deleteMemberHome(UUID homeId, UUID personId);
-    public Optional<MemberHomeDto> getMemberHome(UUID personId);
+    public Optional<MemberHomeDto> getMemberHome(UUID personId, UUID homeId);
     public List<MemberDto> getAllMemberHome(UUID homeId);
     public void updateRoleMemberHome(UUID homeId, UUID personId, UUID newRol);
 
