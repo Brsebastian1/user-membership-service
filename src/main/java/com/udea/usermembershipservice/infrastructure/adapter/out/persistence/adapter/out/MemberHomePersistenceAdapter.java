@@ -12,6 +12,7 @@ import com.udea.usermembershipservice.aplication.useCase.dto.mermberHome.MemberH
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.MemberHomeJpaEntity;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.entity.MemberHomeJpaEntityId;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.mapper.MemberHomePersistenceMapper;
+import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.repository.SpringDataHomeJpaRepository;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.repository.SpringDataJpaRepository;
 import com.udea.usermembershipservice.infrastructure.adapter.out.persistence.repository.SpringDataMemberHomeJpaRepository;
 
@@ -21,14 +22,17 @@ public class MemberHomePersistenceAdapter implements IMemberHomeRepositoryPort {
     private final SpringDataMemberHomeJpaRepository repository;
     private final SpringDataJpaRepository personRepository;
     private final MemberHomePersistenceMapper mapper;
+    private final SpringDataHomeJpaRepository homeRepository;
 
     public MemberHomePersistenceAdapter(
             SpringDataMemberHomeJpaRepository repository,
             SpringDataJpaRepository personRepository,
-            MemberHomePersistenceMapper mapper) {
+            MemberHomePersistenceMapper mapper,
+            SpringDataHomeJpaRepository homeRepository) {
         this.repository = repository;
         this.personRepository = personRepository;
         this.mapper = mapper;
+        this.homeRepository = homeRepository;
     }
 
     @Override
@@ -46,10 +50,17 @@ public class MemberHomePersistenceAdapter implements IMemberHomeRepositoryPort {
 
     @Override
     public Optional<MemberHomeDto> getMemberHome(UUID personId, UUID homeId) {
-        return repository.findByIdPersonIdAndIdHomeId(personId, homeId)
-            .flatMap(memberHomeJpaEntity -> personRepository.findById(personId)
-                .map(personJpaEntity -> mapper.toDto(memberHomeJpaEntity, personJpaEntity)));
-    }
+    return repository.findByIdPersonIdAndIdHomeId(personId, homeId)
+        .flatMap(memberHomeJpaEntity ->
+            personRepository.findById(personId)
+                .flatMap(personJpaEntity ->
+                    homeRepository.findById(homeId)
+                        .map(homeJpaEntity ->
+                            mapper.toDto(memberHomeJpaEntity, personJpaEntity, homeJpaEntity)
+                        )
+                )
+        );
+}
 
     @Override
     public List<MemberDto> getAllMemberHome(UUID homeId) {
